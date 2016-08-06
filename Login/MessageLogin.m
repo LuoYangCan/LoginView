@@ -12,13 +12,15 @@
 @property (weak, nonatomic) IBOutlet UITextField *PhoneNumber;
 @property (weak, nonatomic) IBOutlet UITextField *verifyNumber;
 @property (weak, nonatomic) IBOutlet UIButton *Verify;
-
+//@property (strong,nonatomic) NSString *Results;
+@property (strong,nonatomic) NSString* randomnumber;
 @end
 
 @implementation MessageLogin
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.PhoneNumber.placeholder =@"11位大陆手机号";
     // Do any additional setup after loading the view.
 }
 
@@ -28,8 +30,65 @@
 }
 - (IBAction)tapButton:(id)sender {
     /*短信API*/
-    [self performSegueWithIdentifier:@"login" sender:nil];
+    if (self.PhoneNumber.text.length == 11 ) {
+        int random = arc4random()%10000;
+        NSLog(@"random是%i",random);
+        self.randomnumber =[NSString stringWithFormat:@"%i",random];
+        NSString *encodePhone = [self.PhoneNumber.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *URLtext = [NSString stringWithFormat:@"860-1?showapi_appid=22718&showapi_sign=a30b3fab36334b08bdff76b2fdee72d8&mobile=%@&title=Test&content=%d",encodePhone,random];
+        NSLog(@"看看是不是这个？？%@",URLtext);
+        [[ATNetworkingHelper SharedHttpManager]GET:URLtext parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if (responseObject != nil) {
+                NSDictionary *dict = responseObject;
+                NSLog(@"不执行的吗%@",dict);
+                NSDictionary * res = dict[@"showapi_res_body"];
+//                [res enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                    NSDictionary *result = obj;
+//                }];
+                NSString* Results = res[@"ret_code"];
+                if ([Results isEqualToString:@"0"]) {
+                    self.Verify.titleLabel.text = @"已发送";
+                }
+                
+               
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"失败了也");
+        }];
+    }else{                      //如果电话没填则报错
+        UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入正确的号码" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *acton1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alert1 addAction:acton1];
+        [self presentViewController:alert1 animated:YES completion:nil];
+        
+    }
 }
+- (IBAction)Finish:(UIButton *)sender {
+    if ([self.verifyNumber.text isEqualToString:self.randomnumber]) {
+        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+        path = [path stringByAppendingString:@"myDatabase.db"];
+        FMDatabase *db = [FMDatabase databaseWithPath:path];
+        if ([db open]) {
+            NSLog(@"数据库打开成功");
+            [db executeUpdate:@"Create Table IF NOT EXIST User(Account,Password)"];
+        }       NSString *Account = self.Account1;
+                NSString *Password = self.Password1;
+                NSLog(@"账号是是是：%@ 密码是是是:%@",Account,Password);
+            [db executeUpdate:@"INSERT INTO User(Account,Password)VALUES(?,?)",Account,Password];
+                NSLog(@"注册成功");
+                [db close];
+         [self performSegueWithIdentifier:@"login" sender:nil];
+    }else{
+        UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"验证码输入错误" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *acton1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alert1 addAction:acton1];
+        [self presentViewController:alert1 animated:YES completion:nil];
+
+    }
+}
+
 
 /*
 #pragma mark - Navigation

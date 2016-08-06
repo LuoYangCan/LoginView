@@ -7,7 +7,11 @@
 //
 
 #import "ViewController.h"
-
+//@protocol PassValueDelegate <NSObject>
+//- (void) UsersAccount:(NSString *)Account;
+//- (void) UsersPassword:(NSString *)Password;
+//@end
 @interface Register : ViewController
+//@property (weak,nonatomic) id<PassValueDelegate > delegate;
 
 @end

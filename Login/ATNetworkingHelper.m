@@ -7,8 +7,8 @@
 //
 
 #import "ATNetworkingHelper.h"
-#import "AFNetworking.h"
-static  NSString *const shortMessage = @"http://route.showapi.com/860-1?showapi_appid=22718&showapi_sign=a30b3fab36334b08bdff76b2fdee72d8";
+
+static  NSString *const shortMessage = @"http://route.showapi.com/";
 @implementation ATNetworkingHelper
 + (AFHTTPSessionManager *) SharedHttpManager{
     static AFHTTPSessionManager * _sharedClient = nil;

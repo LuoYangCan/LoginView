@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ATNetworkingHelper.h"
+#import "FMDB.h"
+#import "Register.h"
 @interface MessageLogin : UIViewController
-
+@property (strong,nonatomic) NSString * Account1;
+@property (strong,nonatomic) NSString * Password1;
 @end

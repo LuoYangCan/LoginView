@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "AFNetworking.h"
 @interface ATNetworkingHelper : NSObject
-
++ (AFHTTPSessionManager *) SharedHttpManager;
 @end
