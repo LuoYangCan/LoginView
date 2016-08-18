@@ -14,6 +14,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *Verify;
 //@property (strong,nonatomic) NSString *Results;
 @property (strong,nonatomic) NSString* randomnumber;
+@property (assign,nonatomic) int count;
+@property (strong,nonatomic) NSTimer *timer;
 @end
 
 @implementation MessageLogin
@@ -21,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.PhoneNumber.placeholder =@"11位大陆手机号";
+    self.count = 60;
     // Do any additional setup after loading the view.
 }
 
@@ -36,24 +39,26 @@
         self.randomnumber =[NSString stringWithFormat:@"%i",random];
         NSString *encodePhone = [self.PhoneNumber.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSString *URLtext = [NSString stringWithFormat:@"860-1?showapi_appid=22718&showapi_sign=a30b3fab36334b08bdff76b2fdee72d8&mobile=%@&title=Test&content=%d",encodePhone,random];
-        NSLog(@"看看是不是这个？？%@",URLtext);
         [[ATNetworkingHelper SharedHttpManager]GET:URLtext parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             if (responseObject != nil) {
                 NSDictionary *dict = responseObject;
-                NSLog(@"不执行的吗%@",dict);
                 NSDictionary * res = dict[@"showapi_res_body"];
 //                [res enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //                    NSDictionary *result = obj;
 //                }];
                 NSString* Results = res[@"ret_code"];
                 if ([Results isEqualToString:@"0"]) {
-                    self.Verify.titleLabel.text = @"已发送";
+//                    self.Verify.titleLabel.text = @"已发送";
+//                    self.Verify.userInteractionEnabled = NO;
+                    [self.Verify setEnabled:NO];
+                    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+                   
                 }
                 
                
             }
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"失败了也");
+            NSLog(@"失败了");
         }];
     }else{                      //如果电话没填则报错
         UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入正确的号码" preferredStyle:UIAlertControllerStyleAlert];
@@ -88,7 +93,20 @@
 
     }
 }
-
+#pragma mark - NSTimer的实现
+- (void)onTimer {
+    if (self.count > 0) {
+        [self.Verify setTitleColor:[UIColor colorWithWhite:0.468 alpha:1.000] forState:UIControlStateDisabled];
+        [self.Verify setTitle:[NSString stringWithFormat:@"%d秒后重新获取",self.count] forState:UIControlStateDisabled];
+        self.count --;
+    }else{
+        self.count = 60;
+        [self.timer invalidate];
+        self.timer = nil;
+        [self.Verify setTitle:@"重发验证码" forState:UIControlStateNormal];
+        [self.Verify setEnabled:YES];
+    }
+            }
 
 /*
 #pragma mark - Navigation

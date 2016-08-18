@@ -35,7 +35,6 @@
     self.Check.on = self.sw;
     if (self.Check.on) {
         [self loadfromFile];
-        
     };
 }
 
