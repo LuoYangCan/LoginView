@@ -66,6 +66,8 @@
                     
                 }
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                [self.Verify setEnabled:NO];
+                self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
                 NSLog(@"失败了");
             }];
 
@@ -116,6 +118,7 @@
         [self.timer invalidate];
         self.timer = nil;
         [self.Verify setTitle:@"重发验证码" forState:UIControlStateNormal];
+        [self.Verify setTitle:@"60秒后重新获取" forState:UIControlStateDisabled];
         [self.Verify setEnabled:YES];
     }
             }
