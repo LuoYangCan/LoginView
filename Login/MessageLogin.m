@@ -5,25 +5,26 @@
 //  Created by 孤岛 on 16/8/1.
 //  Copyright © 2016年 孤岛. All rights reserved.
 //
-
+#import "ViewController.h"
 #import "MessageLogin.h"
 
-@interface MessageLogin ()
-@property (weak, nonatomic) IBOutlet UITextField *PhoneNumber;
-@property (weak, nonatomic) IBOutlet UITextField *verifyNumber;
-@property (weak, nonatomic) IBOutlet UIButton *Verify;
-//@property (strong,nonatomic) NSString *Results;
-@property (strong,nonatomic) NSString* randomnumber;
-@property (assign,nonatomic) int count;
-@property (strong,nonatomic) NSTimer *timer;
+@interface MessageLogin ()<UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField * PhoneNumber;
+@property (weak, nonatomic) IBOutlet UITextField * verifyNumber;
+@property (weak, nonatomic) IBOutlet UIButton    * Verify;
+@property (strong,nonatomic) NSString            * randomnumber;
+@property (assign,nonatomic) int                   count;
+@property (strong,nonatomic) NSTimer             * timer;
 @end
 
 @implementation MessageLogin
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.PhoneNumber.placeholder =@"11位大陆手机号";
-    self.count = 60;
+    self.PhoneNumber.delegate    = self;
+    self.verifyNumber.delegate   = self;
+    self.PhoneNumber.placeholder = @"11位大陆手机号";
+    self.count                   = 60;
     // Do any additional setup after loading the view.
 }
 
@@ -31,14 +32,16 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+//点击空白回收键盘
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.PhoneNumber  resignFirstResponder];
+    [self.verifyNumber resignFirstResponder];
+}
 - (IBAction)tapButton:(id)sender {
     /*短信API*/
     if (self.PhoneNumber.text.length == 11 ) {
         if (self.checkPhoneNumber) {
-            UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"此号码已被注册" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *acton1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert1 addAction:acton1];
+            UIAlertController *alert1 = [AlertHelper Alertwithtitle:@"提示" message:@"此号码已被注册" actiontitle:@"确定"];
             [self presentViewController:alert1 animated:YES completion:nil];
 
         }else{
@@ -47,6 +50,7 @@
             self.randomnumber =[NSString stringWithFormat:@"%i",random];
             NSString *encodePhone = [self.PhoneNumber.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             NSString *URLtext = [NSString stringWithFormat:@"860-1?showapi_appid=22718&showapi_sign=a30b3fab36334b08bdff76b2fdee72d8&mobile=%@&title=CQUPT&content=%d",encodePhone,random];
+            
             [[ATNetworkingHelper SharedHttpManager]GET:URLtext parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 if (responseObject != nil) {
                     NSDictionary *dict = responseObject;
@@ -65,7 +69,8 @@
                     
                     
                 }
-            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            }
+                failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                 [self.Verify setEnabled:NO];
                 self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
                 NSLog(@"失败了");
@@ -74,38 +79,32 @@
             
         }
            }else{                      //如果电话没填则报错
-        UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入正确的号码" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *acton1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alert1 addAction:acton1];
+        UIAlertController *alert1 = [AlertHelper Alertwithtitle:@"提示" message:@"请输入正确的号码" actiontitle:@"确定"];
         [self presentViewController:alert1 animated:YES completion:nil];
         
     }
 }
 - (IBAction)Finish:(UIButton *)sender {
-    if ([self.verifyNumber.text isEqualToString:self.randomnumber]) {
-        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-        path = [path stringByAppendingString:@"myDatabase.db"];
-        FMDatabase *db = [FMDatabase databaseWithPath:path];
-        if ([db open]) {
-            NSLog(@"数据库打开成功");
-            [db executeUpdate:@"Create Table IF NOT EXIST User(Account,Password)"];
-        }       NSString *Account = self.Account1;
-                NSString *Password = self.Password1;
-                NSLog(@"账号是是是：%@ 密码是是是:%@",Account,Password);
-            [db executeUpdate:@"INSERT INTO User(Account,Password)VALUES(?,?)",Account,Password];
-        [db executeUpdate:@"INSERT INTO User(Account,Password)VALUES(?,?)",self.PhoneNumber.text,Password];
-                NSLog(@"注册成功");
-                [db close];
-         [self performSegueWithIdentifier:@"login" sender:nil];
-    }else{
-        UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"验证码输入错误" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *acton1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alert1 addAction:acton1];
-        [self presentViewController:alert1 animated:YES completion:nil];
-
+    [self FinishRegister];
     }
+#pragma mark -FinishRegister
+-(void)FinishRegister{
+    if ([self.verifyNumber.text isEqualToString:self.randomnumber]) {
+       FMDatabase *db = [DatabaseHelper openDatabase];
+        NSString *Account = self.Account1;
+        NSString *Password = self.Password1;
+        NSLog(@"账号是是是：%@ 密码是是是:%@",Account,Password);
+        [db executeUpdate:@"INSERT INTO User(Account,Password)VALUES(?,?)",Account,Password];
+        [db executeUpdate:@"INSERT INTO User(Account,Password)VALUES(?,?)",self.PhoneNumber.text,Password];
+        NSLog(@"注册成功");
+        [db close];
+        [self performSegueWithIdentifier:@"login" sender:nil];
+    }else{
+        UIAlertController *alert1 = [AlertHelper Alertwithtitle:@"提示" message:@"验证码输入错误" actiontitle:@"确定"];
+        [self presentViewController:alert1 animated:YES completion:nil];
+        
+    }
+
 }
 #pragma mark - NSTimer的实现
 - (void)onTimer {
@@ -125,12 +124,7 @@
 #pragma mark - 判断是否已有此电话注册
 - (BOOL) checkPhoneNumber{
     BOOL FLag = NO;
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    path = [path stringByAppendingString:@"myDatabase.db"];
-    FMDatabase *db = [FMDatabase databaseWithPath:path];
-    if ([db open]) {
-        NSLog(@"数据库打开成功");
-    }
+    FMDatabase *db = [DatabaseHelper openDatabase];
     FMResultSet *rs = [db executeQuery:@"SELECT * FROM User"];
     while ([rs next]) {
         NSString * Account = [rs stringForColumn:@"Account"];
@@ -142,6 +136,21 @@
     return FLag;
     
 }
+#pragma mark - DidonExit
+- (IBAction)Change:(id)sender {
+    [self.verifyNumber becomeFirstResponder];
+}
+
+- (IBAction)Done:(id)sender {
+    [self FinishRegister];
+}
+//#pragma mark - 跳转
+//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+//    if ([segue.identifier isEqualToString:@"login"]) {
+//        ViewController *LoginVC = [segue destinationViewController];
+//        [LoginVC reloadInputViews];
+//    }
+//}
 /*
 #pragma mark - Navigation
 

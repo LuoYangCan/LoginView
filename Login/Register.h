@@ -11,7 +11,7 @@
 //- (void) UsersAccount:(NSString *)Account;
 //- (void) UsersPassword:(NSString *)Password;
 //@end
-@interface Register : ViewController
+@interface Register : UIViewController
 //@property (weak,nonatomic) id<PassValueDelegate > delegate;
 
 @end

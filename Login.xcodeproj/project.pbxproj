@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		683EFBB21D4A24FB00CB825D /* Userinformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 683EFBB11D4A24FB00CB825D /* Userinformation.m */; };
-		683EFBB51D4A2C1300CB825D /* UINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 683EFBB41D4A2C1300CB825D /* UINavigationController.m */; };
 		683F87551D5472E000AB79FB /* Register.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F87541D5472E000AB79FB /* Register.m */; };
 		683F87571D5486EF00AB79FB /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F87561D5486EF00AB79FB /* libsqlite3.0.tbd */; };
 		683F875A1D54C0EB00AB79FB /* ATNetworkingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F87591D54C0EB00AB79FB /* ATNetworkingHelper.m */; };
@@ -39,19 +38,19 @@
 		6852C64E1D520075001B5072 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6852C6461D520075001B5072 /* FMDatabaseQueue.m */; };
 		6852C64F1D520075001B5072 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6852C6491D520075001B5072 /* FMResultSet.m */; };
 		6852C6501D520075001B5072 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6852C64A1D520075001B5072 /* Info.plist */; };
+		68AF85001D7D0484006DAC98 /* DatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF84FF1D7D0484006DAC98 /* DatabaseHelper.m */; };
+		68AF85031D7D0813006DAC98 /* AlertHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF85021D7D0813006DAC98 /* AlertHelper.m */; };
 		68D79B8F1D4E6B8500DFACF3 /* MessageLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D79B8E1D4E6B8500DFACF3 /* MessageLogin.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		683EFBB01D4A24FB00CB825D /* Userinformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Userinformation.h; sourceTree = "<group>"; };
 		683EFBB11D4A24FB00CB825D /* Userinformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Userinformation.m; sourceTree = "<group>"; };
-		683EFBB31D4A2C1300CB825D /* UINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationController.h; sourceTree = "<group>"; };
-		683EFBB41D4A2C1300CB825D /* UINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationController.m; sourceTree = "<group>"; };
 		683F87531D5472E000AB79FB /* Register.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Register.h; sourceTree = "<group>"; };
 		683F87541D5472E000AB79FB /* Register.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Register.m; sourceTree = "<group>"; };
 		683F87561D5486EF00AB79FB /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
-		683F87581D54C0EB00AB79FB /* ATNetworkingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkingHelper.h; sourceTree = "<group>"; };
-		683F87591D54C0EB00AB79FB /* ATNetworkingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkingHelper.m; sourceTree = "<group>"; };
+		683F87581D54C0EB00AB79FB /* ATNetworkingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATNetworkingHelper.h; path = Login/ATNetworkingHelper.h; sourceTree = "<group>"; };
+		683F87591D54C0EB00AB79FB /* ATNetworkingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATNetworkingHelper.m; path = Login/ATNetworkingHelper.m; sourceTree = "<group>"; };
 		683F875C1D54C15200AB79FB /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		683F875D1D54C15200AB79FB /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		683F875E1D54C15200AB79FB /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
@@ -107,6 +106,11 @@
 		6852C6481D520075001B5072 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		6852C6491D520075001B5072 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		6852C64A1D520075001B5072 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68AF84FE1D7D0484006DAC98 /* DatabaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DatabaseHelper.h; path = Login/DatabaseHelper.h; sourceTree = "<group>"; };
+		68AF84FF1D7D0484006DAC98 /* DatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseHelper.m; path = Login/DatabaseHelper.m; sourceTree = "<group>"; };
+		68AF85011D7D0813006DAC98 /* AlertHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertHelper.h; path = Login/AlertHelper.h; sourceTree = "<group>"; };
+		68AF85021D7D0813006DAC98 /* AlertHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertHelper.m; path = Login/AlertHelper.m; sourceTree = "<group>"; };
+		68AF85061D7D12D5006DAC98 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
 		68D79B8D1D4E6B8500DFACF3 /* MessageLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageLogin.h; sourceTree = "<group>"; };
 		68D79B8E1D4E6B8500DFACF3 /* MessageLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageLogin.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -201,6 +205,7 @@
 				685045CB1D4611BC003618C2 /* Assets.xcassets */,
 				685045CD1D4611BC003618C2 /* LaunchScreen.storyboard */,
 				685045D01D4611BC003618C2 /* Info.plist */,
+				68AF85051D7D12BB006DAC98 /* Helper */,
 				6852C63E1D520075001B5072 /* fmdb */,
 				685045BF1D4611BC003618C2 /* Supporting Files */,
 			);
@@ -214,14 +219,10 @@
 				685045C01D4611BC003618C2 /* main.m */,
 				683EFBB01D4A24FB00CB825D /* Userinformation.h */,
 				683EFBB11D4A24FB00CB825D /* Userinformation.m */,
-				683EFBB31D4A2C1300CB825D /* UINavigationController.h */,
-				683EFBB41D4A2C1300CB825D /* UINavigationController.m */,
 				68D79B8D1D4E6B8500DFACF3 /* MessageLogin.h */,
 				68D79B8E1D4E6B8500DFACF3 /* MessageLogin.m */,
 				683F87531D5472E000AB79FB /* Register.h */,
 				683F87541D5472E000AB79FB /* Register.m */,
-				683F87581D54C0EB00AB79FB /* ATNetworkingHelper.h */,
-				683F87591D54C0EB00AB79FB /* ATNetworkingHelper.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -243,6 +244,21 @@
 				6852C64A1D520075001B5072 /* Info.plist */,
 			);
 			path = fmdb;
+			sourceTree = "<group>";
+		};
+		68AF85051D7D12BB006DAC98 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				68AF85061D7D12D5006DAC98 /* Helper.h */,
+				683F87581D54C0EB00AB79FB /* ATNetworkingHelper.h */,
+				683F87591D54C0EB00AB79FB /* ATNetworkingHelper.m */,
+				68AF84FE1D7D0484006DAC98 /* DatabaseHelper.h */,
+				68AF84FF1D7D0484006DAC98 /* DatabaseHelper.m */,
+				68AF85011D7D0813006DAC98 /* AlertHelper.h */,
+				68AF85021D7D0813006DAC98 /* AlertHelper.m */,
+			);
+			name = Helper;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,9 +346,9 @@
 				6852C64E1D520075001B5072 /* FMDatabaseQueue.m in Sources */,
 				683F877F1D54C15200AB79FB /* AFNetworkReachabilityManager.m in Sources */,
 				685045C41D4611BC003618C2 /* AppDelegate.m in Sources */,
-				683EFBB51D4A2C1300CB825D /* UINavigationController.m in Sources */,
 				683F87891D54C15200AB79FB /* UIImageView+AFNetworking.m in Sources */,
 				683F878A1D54C15200AB79FB /* UIProgressView+AFNetworking.m in Sources */,
+				68AF85001D7D0484006DAC98 /* DatabaseHelper.m in Sources */,
 				683F87831D54C15200AB79FB /* AFURLSessionManager.m in Sources */,
 				683F878B1D54C15200AB79FB /* UIRefreshControl+AFNetworking.m in Sources */,
 				683F87851D54C15200AB79FB /* AFImageDownloader.m in Sources */,
@@ -341,6 +357,7 @@
 				6852C64F1D520075001B5072 /* FMResultSet.m in Sources */,
 				683F875A1D54C0EB00AB79FB /* ATNetworkingHelper.m in Sources */,
 				683F87811D54C15200AB79FB /* AFURLRequestSerialization.m in Sources */,
+				68AF85031D7D0813006DAC98 /* AlertHelper.m in Sources */,
 				683F87841D54C15200AB79FB /* AFAutoPurgingImageCache.m in Sources */,
 				683F87871D54C15200AB79FB /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				683F87801D54C15200AB79FB /* AFSecurityPolicy.m in Sources */,

@@ -7,36 +7,33 @@
 //
 
 #import "ViewController.h"
-#import "Userinformation.h"
-#import "FMDB.h"
 
 @interface ViewController ()<UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UISwitch *Check;
+@property (weak, nonatomic) IBOutlet UISwitch    *Check;
 @property (weak, nonatomic) IBOutlet UITextField *Account;
 @property (weak, nonatomic) IBOutlet UITextField *PassWord;
-@property (strong,nonatomic) NSString *RAccount;
-@property (strong,nonatomic) NSString *RPassword;
+@property (strong,nonatomic)         NSString    *RAccount;
+@property (strong,nonatomic)         NSString    *RPassword;
 @property (strong,nonatomic) NSMutableDictionary *dic;
-@property (assign,nonatomic) BOOL sw;
+@property (assign,nonatomic) BOOL                 sw;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.PassWord.delegate =self;
-    self.Account.delegate = self;
-    // Do any additional setup after loading the view, typically from a nib.
-    [self.PassWord setSecureTextEntry:YES];//隐藏输入字符
-    self.PassWord.placeholder = @"请输入密码";
-    self.Account.placeholder = @"请输入账号";
+    self.PassWord.delegate     = self;
+    self.Account.delegate      = self;
+    self.PassWord.placeholder  = @"请输入密码";
+    self.Account.placeholder   = @"请输入账号";
     self.sw = [[NSUserDefaults standardUserDefaults] boolForKey:@"state"];
-    self.Check.on = self.sw;
+    self.Check.on              = self.sw;
     if (self.Check.on) {
         [self loadfromFile];
     };
-}
+    [self.PassWord setSecureTextEntry:YES];//隐藏输入字符
+    // Do any additional setup after loading the view, typically from a nib.
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -55,55 +52,18 @@
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.PassWord resignFirstResponder];
-    [self.Account resignFirstResponder];
+    [self.Account  resignFirstResponder];
 }
-//登陆之后匹配数据库
+//登陆
 - (IBAction)Login:(UIButton *)sender {
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    path = [path stringByAppendingString:@"myDatabase.db"];
-    FMDatabase *db = [FMDatabase databaseWithPath:path];
-    if ([db open]) {
-        NSLog(@"数据库打开成功");
-        [db executeUpdate:@"Create Table IF NOT EXISTS User(Account,Password)"];
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM User"];
-    //分开正确登陆和输入错误
-    BOOL Flag = NO;
-    while ([rs next]) {
-        NSString * Account = [rs stringForColumn:@"Account"];
-        NSString * Password = [rs stringForColumn:@"Password"];
-        if ([self.Account.text isEqualToString:Account]&&[self.PassWord.text isEqualToString:Password]) {
-            NSLog(@"登陆成功");
-            if (self.Check.on) {
-                self.RAccount = self.Account.text;
-                self.RPassword = self.PassWord.text;
-                [self saveFile];
-                
-            }
-            Flag = YES;
-            break;
-        }
-        
-    }if (Flag) {
-        [db close];
-        [self performSegueWithIdentifier:@"succeed" sender:nil];
-    }else{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"输入的账号或密码有误" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alert addAction:action1];
-        [self presentViewController:alert animated:YES completion:^{
-        }];
-    }
-    
+    [self Login];
 }
 
-#pragma mark - UITextFieldDelegate实现
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
-}
+//#pragma mark - UITextFieldDelegate实现
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+//    [textField resignFirstResponder];
+//    return YES;
+//}
 #pragma mark - 储存文件
 //保存文件实现记住密码
 - (void) saveFile{
@@ -135,5 +95,43 @@
     NSLog(@"读取后的字典%@",dic);
     self.Account.text = [dic objectForKey:@"Account"];
     self.PassWord.text = [dic objectForKey:@"Password"];
+}
+#pragma mark -done事件
+- (IBAction)Done:(id)sender {
+    [self Login];
+}
+#pragma mark - 换行
+- (IBAction)Change:(id)sender {
+    [self.PassWord becomeFirstResponder];
+}
+#pragma mark -Login
+-(void)Login{
+    FMDatabase *db = [DatabaseHelper openDatabase];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM User"];
+    //分开正确登陆和输入错误
+    BOOL Flag = NO;
+    while ([rs next]) {
+        NSString * Account = [rs stringForColumn:@"Account"];
+        NSString * Password = [rs stringForColumn:@"Password"];
+        if ([self.Account.text isEqualToString:Account]&&[self.PassWord.text isEqualToString:Password]) {
+            NSLog(@"登陆成功");
+            if (self.Check.on) {
+                self.RAccount = self.Account.text;
+                self.RPassword = self.PassWord.text;
+                [self saveFile];
+                
+            }
+            Flag = YES;
+            break;
+        }
+        
+    }if (Flag) {
+        [db close];
+        [self performSegueWithIdentifier:@"succeed" sender:nil];
+    }else{
+        UIAlertController * alert =[AlertHelper Alertwithtitle:@"提示" message:@"输入的账号或密码有误" actiontitle:@"确定"];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+
 }
 @end

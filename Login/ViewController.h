@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Userinformation.h"
+#import "FMDB.h"
+#import "MessageLogin.h"
+#import "Register.h"
+#import "Helper.h"
 @interface ViewController : UIViewController
 
 

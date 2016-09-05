@@ -7,9 +7,7 @@
 //
 
 #import "Register.h"
-#import "FMDB.h"
-#import "MessageLogin.h"
-@interface Register ()
+@interface Register ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *account;
 @property (weak, nonatomic) IBOutlet UITextField *Password;
 @property (weak, nonatomic) IBOutlet UITextField *CheckPassword;
@@ -20,11 +18,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.Password setSecureTextEntry:YES];
-    [self.CheckPassword setSecureTextEntry:YES];
-    self.account.placeholder = @"请输入账号";
-    self.Password.placeholder = @"请输入六位以上的密码";
+    self.account.delegate          = self;
+    self.Password.delegate         = self;
+    self.CheckPassword.delegate    = self;
+    self.account.placeholder       = @"请输入账号";
+    self.Password.placeholder      = @"请输入六位以上的密码";
     self.CheckPassword.placeholder = @"请再次输入密码";
+    [self.Password      setSecureTextEntry:YES];
+    [self.CheckPassword setSecureTextEntry:YES];
     // Do any additional setup after loading the view.
 }
 
@@ -33,26 +34,12 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)FinishResign:(id)sender {
-    if ([self checkaccount]&&[self check]) {
-        UIAlertController *alert1 = [UIAlertController alertControllerWithTitle:@"提示" message:@"此账号已被注册" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alert1 addAction:action1];
-        [self presentViewController:alert1 animated:YES completion:^{
-        }];
-    }
-       else if ([self.Password.text isEqualToString:self.CheckPassword.text]&&[self check]) {
-           
-            [self performSegueWithIdentifier:@"back" sender:nil];
-    }else{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入正确的信息" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alert addAction:action];
-        [self presentViewController:alert animated:YES completion:^{
-        }];
-    }
-    
+    [self CheckRegister];
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.account       resignFirstResponder];
+    [self.Password      resignFirstResponder];
+    [self.CheckPassword resignFirstResponder];
 }
 #pragma mark - 判断是否没有输入正确信息
 - (BOOL) check{
@@ -62,15 +49,39 @@
         return NO;
     }
 }
+#pragma mark - CheckResign
+-(void)CheckRegister{
+    if ([self checkaccount]&&[self check]) {
+        UIAlertController *alert1 = [AlertHelper Alertwithtitle:@"提示" message:@"此账号已被注册" actiontitle:@"确定"];
+        [self presentViewController:alert1 animated:YES completion:^{
+        }];
+    }
+    else if ([self.Password.text isEqualToString:self.CheckPassword.text]&&[self check]) {
+        
+        [self performSegueWithIdentifier:@"back" sender:nil];
+    }else{
+        UIAlertController *alert = [AlertHelper Alertwithtitle:@"提示" message:@"请输入正确的信息" actiontitle:@"确定"];
+        [self presentViewController:alert animated:YES completion:^{
+        }];
+    }
+    
+
+}
+#pragma mark - DidonExit
+- (IBAction)Change:(id)sender {
+    [self.Password becomeFirstResponder];
+}
+
+- (IBAction)Change2:(id)sender {
+    [self.CheckPassword becomeFirstResponder];
+}
+- (IBAction)Resign:(id)sender {
+    [self CheckRegister];
+}
 #pragma mark - 判断是否已有账号
 - (BOOL) checkaccount{
     BOOL FLag = NO;
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    path = [path stringByAppendingString:@"myDatabase.db"];
-    FMDatabase *db = [FMDatabase databaseWithPath:path];
-    if ([db open]) {
-        NSLog(@"数据库打开成功");
-    }
+   FMDatabase *db = [DatabaseHelper openDatabase];
     FMResultSet *rs = [db executeQuery:@"SELECT * FROM User"];
     while ([rs next]) {
         NSString * Account = [rs stringForColumn:@"Account"];
