@@ -131,7 +131,18 @@
     }else{
         UIAlertController * alert =[AlertHelper Alertwithtitle:@"提示" message:@"输入的账号或密码有误" actiontitle:@"确定"];
                 [self presentViewController:alert animated:YES completion:nil];
+        [db close];
             }
 
+}
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"Register1"]) {
+//        Register *RegisterVC = [segue destinationViewController];
+        if (!self.Check.on) {
+            self.Account.text = @"";
+            self.PassWord.text = @"";
+
+        }
+            }
 }
 @end

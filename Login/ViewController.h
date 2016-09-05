@@ -12,8 +12,8 @@
 #import "MessageLogin.h"
 #import "Register.h"
 #import "Helper.h"
-@interface ViewController : UIViewController
 
+@interface ViewController : UIViewController
 
 @end
 

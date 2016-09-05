@@ -114,7 +114,7 @@
                                 </constraints>
                                 <state key="normal" title="注册"/>
                                 <connections>
-                                    <segue destination="dha-l5-GPG" kind="show" id="ogi-ln-TYd"/>
+                                    <segue destination="dha-l5-GPG" kind="show" identifier="Register1" id="ogi-ln-TYd"/>
                                 </connections>
                             </button>
                         </subviews>
